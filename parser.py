@@ -3,19 +3,21 @@
 import scanner
 import ply.yacc as yacc
 
+
+names_dictionary = {}
 tokens = scanner.tokens
 
 precedence = (
     # to fill ...
-    ("left", '+', '-'),
-    ("left", '*', '/')
+    # ("left", '+', '-'),
+    # ("left", '*', '/')
     # to fill ...
 )
 
 
 def p_error(p):
-    if p:
-        print("Syntax error at line {0}, column {1}: LexToken({2}, '{3}')".format(p.lineno, scanner.find_tok_column(p),
+    if p: # scanner.find_column(p)
+        print("Syntax error at line {0}, column {1}: LexToken({2}, '{3}')".format(p.lineno, "1",
                                                                                   p.type, p.value))
     else:
         print("Unexpected end of input")
@@ -23,29 +25,76 @@ def p_error(p):
 
 def p_program(p):
     """program : instructions_opt"""
+    print("PROGRAM")
 
 
 def p_instructions_opt_1(p):
     """instructions_opt : instructions """
+    print("INSTRUCTIONS OPT 1")
 
 
 def p_instructions_opt_2(p):
     """instructions_opt : """
+    print("INSTRUCTIONS OPT 2")
 
 
 def p_instructions_1(p):
     """instructions : instructions instruction """
+    print("INSTRUCTIONS 1")
 
 
 def p_instructions_2(p):
     """instructions : instruction """
+    print("INSTRUCTIONS 2")
+
+
+def p_instruction_assign(p):
+    'instruction : ID "=" expression'
+    names_dictionary[p[1]] = p[3]
+    print("INSTRUCTION ASSIGN")
+
+
+def p_expression_paren(p):
+    '''expression : "(" expression ")"
+                  | "[" expression "]"
+                  | "{" expression "}"'''
+    p[0] = p[2]
+    print("EXPRESSION PAREN")
+
+
+def p_expression_binop(p):
+    '''expression : expression "+" expression
+                  | expression "-" expression
+                  | expression "*" expression
+                  | expression "/" expression'''
+    print("EXPRESSION BINOP")
+
+
+
+def p_exp_name(p):
+    'expression : ID'
+    try:
+        p[0] = names_dictionary[p[1]]
+    except LookupError:
+        print("Name not defined")
+        p[0] = 0
+    print("EXPRESSION NAME")
+
+
+def p_exp_num(p):
+    'expression : INTNUM'
+    p[0] = p[1]
+    print("EXPRESSION INTNUM")
+
+
+def p_exp_fnum(p):
+    'expression : FLOATNUM'
+    p[0] = p[1]
+    print("EXPRESSION FLOATNUM")
 
 
 # to finish the grammar
 # ....
-
-
-
 
 
 parser = yacc.yacc()

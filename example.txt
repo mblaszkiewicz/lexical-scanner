@@ -1,3 +1,6 @@
+Y = A + (5 + 5)
+
+# Below original example
 # special functions, initializations
 Y = 5.*5;
 A = zeros(5);  # create 5x5 matrix filled with zeros
