@@ -62,14 +62,6 @@ def p_expression_paren(p):
     print("EXPRESSION PAREN")
 
 
-def p_expression_binop(p):
-    '''expression : expression "+" expression
-                  | expression "-" expression
-                  | expression "*" expression
-                  | expression "/" expression'''
-    print("EXPRESSION BINOP")
-
-
 
 def p_exp_name(p):
     'expression : ID'
@@ -95,6 +87,32 @@ def p_exp_fnum(p):
 
 # to finish the grammar
 # ....
+
+def p_while_for(p):
+    '''instruction : WHILE "(" expression ")" "{" instructions "}"
+                   | FOR ID "=" INTNUM ":" INTNUM "{" instructions "}"
+                   | WHILE "(" expression ")" instruction
+                   | FOR ID "=" INTNUM ":" INTNUM instruction '''
+    print("WHILE/FOR")
+
+def p_break_cont_ret(p):
+    '''instruction : BREAK ";"
+                   | CONTINUE ";"
+                   | RETURN ";"'''
+    print("BREAK/CONT/RETURN")
+
+
+def p_print(p):
+    'instruction : PRINT ID ";"'
+    print("PRINT")
+
+
+def p_array_range(p):
+    'arrayrange : ID range'
+
+
+def p_range(p):
+    'range : "[" INTNUM "," INTNUM "]" '
 
 
 parser = yacc.yacc()
